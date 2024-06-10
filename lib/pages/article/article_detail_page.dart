@@ -15,26 +15,28 @@ class ArticleDetailPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              article['title'],
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "Published on: ${article['publish_date']}",
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-            ),
-            SizedBox(height: 20),
-            Text(
-              article['description'],
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 20),
-            ..._buildParagraphs(article['paragraphs']),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                article['title'],
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Published on: ${article['publish_date']}",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              SizedBox(height: 20),
+              Text(
+                article['description'],
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 20),
+              ..._buildParagraphs(article['paragraphs']),
+            ],
+          ),
         ),
       ),
     );

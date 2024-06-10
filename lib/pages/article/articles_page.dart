@@ -79,6 +79,8 @@ class ArticlesPage extends StatelessWidget {
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
@@ -87,6 +89,8 @@ class ArticlesPage extends StatelessWidget {
                                     fontSize: 16,
                                     color: Colors.grey[700],
                                   ),
+                                  maxLines: 5,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),

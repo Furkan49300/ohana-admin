@@ -1,30 +1,121 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ohana_admin/pages/emploi/offre_detail_page.dart';
 
 class OffresPage extends StatelessWidget {
   final VoidCallback onAddOffrePressed;
 
   const OffresPage({super.key, required this.onAddOffrePressed});
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Offres d'emploi",
-            style: TextStyle(fontSize: 25),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Offres d\'emploi'),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream:
+                  FirebaseFirestore.instance.collection('emploi').snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return Center(child: Text("Aucune offre d'emploi trouvée"));
+                }
+                return Wrap(
+                  alignment: WrapAlignment.start,
+                  spacing: 8.0,
+                  runSpacing: 10.0,
+                  children: snapshot.data!.docs.map((doc) {
+                    var offre = doc.data() as Map<String, dynamic>;
+                    var offreId = doc.id;
+                    return MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () {
+                          print(offreId);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OffreDetailPage(
+                                jobOffer: offre,
+                              ),
+                            ),
+                          );
+                          print(offreId);
+                        },
+                        child: Container(
+                          width: 250,
+                          height: 250,
+                          margin:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  offre['title'],
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  'Date de publication: ${offre['publish_date']}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                                Text(
+                                  'Durée: ${offre['duration']}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
           ),
-        ),
-        Container(
-            margin: EdgeInsets.only(bottom: 20),
-            height: 250,
-            child: Placeholder()),
-        ElevatedButton(
-            onPressed: onAddOffrePressed,
-            child: Text("Ajouter une offre d'emploi"))
-      ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: ElevatedButton(
+                onPressed: onAddOffrePressed,
+                child: Text("Ajouter une offre d'emploi"),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

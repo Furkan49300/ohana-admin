@@ -22,7 +22,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'OHana Admin',
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: HomePage(), appBar: MyAppBar()),
+      home: Scaffold(body: HomePage()),
       theme: ThemeData(
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(

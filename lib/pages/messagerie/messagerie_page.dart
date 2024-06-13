@@ -1,55 +1,50 @@
+import 'package:flutter/material.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'article_detail_page.dart';
 
-class ArticlesPage extends StatelessWidget {
-  final VoidCallback onAddArticlePressed;
-  final Function(Map<String, dynamic>, String)
-      onArticleDetailPressed; // Changez le type pour accepter les arguments
+class MessageriePage extends StatelessWidget {
+  final Function(Map<String, dynamic>, String) onMessageDetailPressed;
 
-  const ArticlesPage(
-      {super.key,
-      required this.onAddArticlePressed,
-      required this.onArticleDetailPressed});
+  const MessageriePage({super.key, required this.onMessageDetailPressed});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Articles'),
+        title: const Text('Messagerie'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection('article').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('messagerie')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text("Aucun article trouvé"));
+                  return Center(child: Text("Aucun message trouvé"));
                 }
                 return Wrap(
                   alignment: WrapAlignment.start,
                   spacing: 8.0,
                   runSpacing: 10.0,
                   children: snapshot.data!.docs.map((doc) {
-                    var article = doc.data() as Map<String, dynamic>;
-                    var articleId = doc.id;
+                    var message = doc.data() as Map<String, dynamic>;
+                    var messageId = doc.id;
                     return MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
-                          onArticleDetailPressed(
-                              article, articleId); // Utilisez la fonction ici
+                          onMessageDetailPressed(message, messageId);
                         },
                         child: Container(
                           width: 250,
-                          height: 250,
+                          height: 150,
                           margin:
                               EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                           decoration: BoxDecoration(
@@ -70,22 +65,32 @@ class ArticlesPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  article['title'],
+                                  "Nom: ${message['lastname']}",
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  maxLines: 2,
+                                  maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
-                                  article['description'],
+                                  "Prénom: ${message['firstname']}",
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.grey[700],
                                   ),
-                                  maxLines: 5,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  "Offre: ${message['offer']}",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                  ),
+                                  maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ],
@@ -97,15 +102,6 @@ class ArticlesPage extends StatelessWidget {
                   }).toList(),
                 );
               },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: ElevatedButton(
-                onPressed: onAddArticlePressed,
-                child: Text("Ajouter un article"),
-              ),
             ),
           ),
         ],

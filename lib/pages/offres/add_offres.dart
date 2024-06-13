@@ -121,7 +121,7 @@ class _AddOffreState extends State<AddOffrePage> {
                 ),
                 BuildTextField(
                   controller: _salaryController,
-                  labelText: 'Salaire',
+                  labelText: 'Salaire en €',
                   validatorMessage: 'Veuillez entrer un salaire',
                 ),
                 BuildTextField(

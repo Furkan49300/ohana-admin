@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:ohana_admin/pages/composants/section_title.dart';
 import 'package:ohana_admin/pages/composants/text_field.dart';
 import 'package:intl/intl.dart'; // Add this import for date formatting
@@ -18,6 +21,7 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
   final TextEditingController _publishDateController = TextEditingController();
   final TextEditingController _updateDateController = TextEditingController();
   List<Map<String, dynamic>> _paragraphControllers = [];
+  QuillController _controller = QuillController.basic();
 
   @override
   void initState() {
@@ -28,10 +32,9 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
   void _addParagraphController() {
     setState(() {
       _paragraphControllers.add({
-        'title': TextEditingController(),
         'url_image': null,
         'image_subtitle': TextEditingController(),
-        'text': TextEditingController(),
+        'text': QuillController.basic(),
         'video': TextEditingController(),
       });
     });
@@ -47,20 +50,18 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
     if (_formKey.currentState!.validate()) {
       // Format the current date for publish_date and update_date
       String currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
-
       // Prepare the data for the new article
       Map<String, dynamic> articleData = {
         'title': _titleController.text,
         'description': _descriptionController.text,
         'publish_date': currentDate,
         'update_date': currentDate,
-        'image1': '', // Placeholder for image1
+        'image': '', // Placeholder for image1
         'paragraphs': _paragraphControllers.map((paragraph) {
           return {
-            'title': paragraph['title'].text,
             'url_image': '', // Placeholder for url_image
             'image_subtitle': paragraph['image_subtitle'].text,
-            'text': paragraph['text'].text,
+            'text': jsonEncode(paragraph['text'].document.toDelta().toJson()),
             'video': '', // Placeholder for video
           };
         }).toList(),
@@ -86,6 +87,8 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
     for (var controller in _paragraphControllers) {
       controller.forEach((key, value) {
         if (value is TextEditingController) {
+          value.dispose();
+        } else if (value is QuillController) {
           value.dispose();
         }
       });
@@ -114,10 +117,9 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
                   validatorMessage: 'Veuillez entrer un titre',
                 ),
                 BuildTextField(
-                  controller: _descriptionController,
-                  labelText: 'Description',
-                  validatorMessage: 'Veuillez entrer une description',
-                ),
+                    controller: _descriptionController,
+                    labelText: 'Description',
+                    validatorMessage: 'Veuillez entrer une description'),
                 const SizedBox(height: 20),
                 BuildSectionTitle(title: 'Paragraphes'),
                 ..._buildParagraphFields(),
@@ -164,19 +166,34 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BuildTextField(
-                controller: controllers['title'],
-                labelText: 'Titre du paragraphe',
-                validatorMessage: 'Veuillez entrer le titre du paragraphe',
+              Text("Texte du paragraphe",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              QuillToolbar.simple(
+                configurations: QuillSimpleToolbarConfigurations(
+                  controller: controllers['text'],
+                  sharedConfigurations: const QuillSharedConfigurations(
+                    locale: Locale('de'),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 30),
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black)),
+                child: QuillEditor.basic(
+                  configurations: QuillEditorConfigurations(
+                    placeholder: 'Texte',
+                    padding: EdgeInsets.all(20),
+                    controller: controllers['text'],
+                    sharedConfigurations: const QuillSharedConfigurations(
+                      locale: Locale('de'),
+                    ),
+                  ),
+                ),
               ),
               BuildTextField(
                 controller: controllers['image_subtitle'],
                 labelText: 'Sous-titre de l\'image',
-              ),
-              BuildTextField(
-                controller: controllers['text'],
-                labelText: 'Texte du paragraphe',
-                validatorMessage: 'Veuillez entrer le texte du paragraphe',
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

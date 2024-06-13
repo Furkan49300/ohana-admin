@@ -1,17 +1,34 @@
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 class ArticleDetailPage extends StatelessWidget {
   final Map<String, dynamic> article;
-  final String articleId; // Accept the document ID
+  final String articleId;
+  final VoidCallback onBackPressed;
 
-  const ArticleDetailPage(
-      {super.key, required this.article, required this.articleId});
+  const ArticleDetailPage({
+    Key? key,
+    required this.article,
+    required this.articleId,
+    required this.onBackPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(article['title']),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: onBackPressed,
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => _deleteArticle(context),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -21,17 +38,17 @@ class ArticleDetailPage extends StatelessWidget {
             children: [
               Text(
                 article['title'],
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
               Text(
-                "Published on: ${article['publish_date']}",
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-              ),
-              SizedBox(height: 20),
-              Text(
                 article['description'],
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 15),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Publié le: ${article['publish_date']}",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
               SizedBox(height: 20),
               ..._buildParagraphs(article['paragraphs']),
@@ -44,6 +61,12 @@ class ArticleDetailPage extends StatelessWidget {
 
   List<Widget> _buildParagraphs(List<dynamic> paragraphs) {
     return paragraphs.map((paragraph) {
+      var textDelta = quill.Document.fromJson(jsonDecode(paragraph['text']));
+      var textController = quill.QuillController(
+        document: textDelta,
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
@@ -64,11 +87,10 @@ class ArticleDetailPage extends StatelessWidget {
                 paragraph['image_subtitle'],
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
-            if (paragraph['text'] != null)
-              Text(
-                paragraph['text'],
-                style: TextStyle(fontSize: 16),
-              ),
+            quill.QuillEditor.basic(
+                configurations: quill.QuillEditorConfigurations(
+                    controller: textController,
+                    enableInteractiveSelection: false)),
             if (paragraph['video'] != null && paragraph['video'] != '')
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
@@ -81,5 +103,51 @@ class ArticleDetailPage extends StatelessWidget {
         ),
       );
     }).toList();
+  }
+
+  void _deleteArticle(BuildContext context) async {
+    bool confirm = await _showConfirmationDialog(context);
+    if (confirm) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('article')
+            .doc(articleId)
+            .delete();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Article supprimé avec succès')),
+        );
+        onBackPressed();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('Erreur lors de la suppression de l\'article')),
+        );
+      }
+    }
+  }
+
+  Future<bool> _showConfirmationDialog(BuildContext context) async {
+    return (await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Confirmer la suppression'),
+              content: Text('Voulez-vous vraiment supprimer cet article?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child:
+                      Text('Annuler', style: TextStyle(color: Colors.purple)),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child:
+                      Text('Supprimer', style: TextStyle(color: Colors.purple)),
+                ),
+              ],
+            );
+          },
+        )) ??
+        false;
   }
 }

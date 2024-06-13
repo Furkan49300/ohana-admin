@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:ohana_admin/pages/emploi/offre_detail_page.dart';
 
 class OffresPage extends StatelessWidget {
   final VoidCallback onAddOffrePressed;
+  final Function(Map<String, dynamic>, String)
+      onOffreDetailPressed; // Ajoutez cette ligne
 
-  const OffresPage({super.key, required this.onAddOffrePressed});
+  const OffresPage(
+      {super.key,
+      required this.onAddOffrePressed,
+      required this.onOffreDetailPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +42,8 @@ class OffresPage extends StatelessWidget {
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
-                          print(offreId);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OffreDetailPage(
-                                jobOffer: offre,
-                              ),
-                            ),
-                          );
-                          print(offreId);
+                          onOffreDetailPressed(
+                              offre, offreId); // Utilisez la fonction ici
                         },
                         child: Container(
                           width: 250,

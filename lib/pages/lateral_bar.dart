@@ -6,6 +6,7 @@ class LateralBar extends StatefulWidget {
   final VoidCallback onDevisPressed;
   final VoidCallback onOffresPressed;
   final VoidCallback onCandidaturesPressed;
+  final VoidCallback onMessageriePressed;
   final String currentPage;
 
   const LateralBar(
@@ -15,7 +16,8 @@ class LateralBar extends StatefulWidget {
       required this.onDevisPressed,
       required this.onOffresPressed,
       required this.currentPage,
-      required this.onCandidaturesPressed});
+      required this.onCandidaturesPressed,
+      required this.onMessageriePressed});
 
   @override
   _LateralBarState createState() => _LateralBarState();
@@ -101,13 +103,13 @@ class _LateralBarState extends State<LateralBar> {
           SizedBox(
             width: double.infinity,
             child: TextButton(
-              onPressed: () {},
+              onPressed: widget.onMessageriePressed,
               style: TextButton.styleFrom(
-                backgroundColor: widget.currentPage == 'aze'
+                backgroundColor: widget.currentPage == 'messagerie'
                     ? Color.fromARGB(129, 148, 142, 141)
                     : Colors.transparent,
               ),
-              child: Text("Messages"),
+              child: Text("Messagerie"),
             ),
           ),
         ],

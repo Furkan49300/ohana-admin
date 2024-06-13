@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MyAppBar({super.key});
+  final VoidCallback onMenuPressed;
+
+  const MyAppBar({super.key, required this.onMenuPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -9,29 +11,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.purple,
       centerTitle: true,
       title: const Text("OHana Admin"),
-      leading: const Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.person),
-            const SizedBox(width: 8),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Bamy',
-                  style: TextStyle(fontSize: 14),
-                ),
-                Text(
-                  'Admin',
-                  style: TextStyle(fontSize: 12, color: Colors.white70),
-                ),
-              ],
-            ),
-          ],
-        ),
+      leading: Builder(
+        builder: (BuildContext context) {
+          return IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: onMenuPressed,
+          );
+        },
       ),
       actions: [IconButton(onPressed: () {}, icon: Icon(Icons.login))],
     );

@@ -6,7 +6,6 @@ class BuildTextField extends StatelessWidget {
   final String? validatorMessage;
 
   const BuildTextField({
-    super.key,
     required this.controller,
     required this.labelText,
     this.validatorMessage,
@@ -15,18 +14,13 @@ class BuildTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
           labelText: labelText,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          border: OutlineInputBorder(),
         ),
-        maxLines: null,
         validator: validatorMessage != null
             ? (value) {
                 if (value == null || value.isEmpty) {

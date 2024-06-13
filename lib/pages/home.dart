@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
   void _showCandidaturesPage() {
     setState(() {
       _selectedPage = CandidaturesPage();

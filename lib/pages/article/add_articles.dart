@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:intl/intl.dart';
 import 'package:ohana_admin/pages/composants/section_title.dart';
 import 'package:ohana_admin/pages/composants/text_field.dart';
-import 'package:intl/intl.dart'; // Add this import for date formatting
+import 'package:ohana_admin/pages/upload_image.dart';
 
 class AddArticlesPage extends StatefulWidget {
   const AddArticlesPage({super.key});
@@ -22,6 +22,7 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
   final TextEditingController _updateDateController = TextEditingController();
   List<Map<String, dynamic>> _paragraphControllers = [];
   QuillController _controller = QuillController.basic();
+  String? imageUrl;
 
   @override
   void initState() {
@@ -48,31 +49,28 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
 
   void _createArticle() async {
     if (_formKey.currentState!.validate()) {
-      // Format the current date for publish_date and update_date
       String currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
-      // Prepare the data for the new article
+
       Map<String, dynamic> articleData = {
         'title': _titleController.text,
         'description': _descriptionController.text,
         'publish_date': currentDate,
         'update_date': currentDate,
-        'image': '', // Placeholder for image1
+        'image': imageUrl ?? '',
         'paragraphs': _paragraphControllers.map((paragraph) {
           return {
-            'url_image': '', // Placeholder for url_image
+            'url_image': paragraph['url_image'] ?? '',
             'image_subtitle': paragraph['image_subtitle'].text,
             'text': jsonEncode(paragraph['text'].document.toDelta().toJson()),
-            'video': '', // Placeholder for video
+            'video': paragraph['video'].text,
           };
         }).toList(),
       };
 
-      // Add the article to Firestore
       CollectionReference articlesRef =
           FirebaseFirestore.instance.collection('article');
       await articlesRef.add(articleData);
 
-      // Optionally show a success message or navigate away
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Article créé avec succès')));
     }
@@ -121,6 +119,11 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
                     labelText: 'Description',
                     validatorMessage: 'Veuillez entrer une description'),
                 const SizedBox(height: 20),
+                UploadImage(onImageUploaded: (url) {
+                  setState(() {
+                    imageUrl = url;
+                  });
+                }),
                 BuildSectionTitle(title: 'Paragraphes'),
                 ..._buildParagraphFields(),
                 const SizedBox(height: 10),
@@ -191,6 +194,11 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
                   ),
                 ),
               ),
+              UploadImage(onImageUploaded: (url) {
+                setState(() {
+                  controllers['url_image'] = url;
+                });
+              }),
               BuildTextField(
                 controller: controllers['image_subtitle'],
                 labelText: 'Sous-titre de l\'image',

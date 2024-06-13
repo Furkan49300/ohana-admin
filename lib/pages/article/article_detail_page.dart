@@ -50,6 +50,11 @@ class ArticleDetailPage extends StatelessWidget {
                 "Publié le: ${article['publish_date']}",
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
+              if (article['image'] != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Image.network(article['image']),
+                ),
               SizedBox(height: 20),
               ..._buildParagraphs(article['paragraphs']),
             ],
@@ -77,28 +82,20 @@ class ArticleDetailPage extends StatelessWidget {
                 paragraph['title'],
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-            if (paragraph['url_image'] != null && paragraph['url_image'] != '')
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Image.network(paragraph['url_image']),
-              ),
             if (paragraph['image_subtitle'] != null)
               Text(
                 paragraph['image_subtitle'],
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
+            if (paragraph['url_image'] != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Image.network(paragraph['url_image']),
+              ),
             quill.QuillEditor.basic(
                 configurations: quill.QuillEditorConfigurations(
                     controller: textController,
                     enableInteractiveSelection: false)),
-            if (paragraph['video'] != null && paragraph['video'] != '')
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  'Video: ${paragraph['video']}',
-                  style: TextStyle(fontSize: 14, color: Colors.blue),
-                ),
-              ),
           ],
         ),
       );

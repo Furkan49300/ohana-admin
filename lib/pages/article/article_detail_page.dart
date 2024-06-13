@@ -42,19 +42,17 @@ class ArticleDetailPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
+                "Publié le: ${article['publish_date']}",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              SizedBox(height: 20),
+              Text(
                 article['description'],
                 style: TextStyle(fontSize: 15),
               ),
               SizedBox(height: 10),
-              Text(
-                "Publié le: ${article['publish_date']}",
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-              ),
               if (article['image'] != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Image.network(article['image']),
-                ),
+                SizedBox(width: 400, child: Image.network(article['image'])),
               SizedBox(height: 20),
               ..._buildParagraphs(article['paragraphs']),
             ],
@@ -82,20 +80,19 @@ class ArticleDetailPage extends StatelessWidget {
                 paragraph['title'],
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
+            if (paragraph['url_image'] != null)
+              SizedBox(
+                  width: 400, child: Image.network(paragraph['url_image'])),
             if (paragraph['image_subtitle'] != null)
               Text(
                 paragraph['image_subtitle'],
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
-            if (paragraph['url_image'] != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Image.network(paragraph['url_image']),
-              ),
             quill.QuillEditor.basic(
                 configurations: quill.QuillEditorConfigurations(
                     controller: textController,
                     enableInteractiveSelection: false)),
+            SizedBox(height: 50)
           ],
         ),
       );

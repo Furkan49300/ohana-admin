@@ -5,7 +5,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:intl/intl.dart';
 import 'package:ohana_admin/pages/composants/section_title.dart';
 import 'package:ohana_admin/pages/composants/text_field.dart';
-import 'package:ohana_admin/pages/upload_image.dart';
+import 'package:ohana_admin/pages/composants/upload_image.dart';
 
 class AddArticlesPage extends StatefulWidget {
   const AddArticlesPage({super.key});
@@ -124,6 +124,8 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
                     imageUrl = url;
                   });
                 }),
+                if (imageUrl != null)
+                  SizedBox(width: 100, child: Image.network(imageUrl!)),
                 BuildSectionTitle(title: 'Paragraphes'),
                 ..._buildParagraphFields(),
                 const SizedBox(height: 10),
@@ -199,6 +201,10 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
                   controllers['url_image'] = url;
                 });
               }),
+              if (controllers['url_image'] != null)
+                SizedBox(
+                    width: 100,
+                    child: Image.network(controllers['url_image']!)),
               BuildTextField(
                 controller: controllers['image_subtitle'],
                 labelText: 'Sous-titre de l\'image',

@@ -28,59 +28,62 @@ class OffreDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
+        // Ajoutez SingleChildScrollView ici
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (jobOffer['url_image'] != null &&
+                jobOffer['url_image'].isNotEmpty)
+              SizedBox(width: 350, child: Image.network(jobOffer['url_image'])),
+            SizedBox(height: 10),
+            Text(
+              jobOffer['title'],
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Lieu: ${jobOffer['place']}",
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Type de contrat: ${jobOffer['contract']}",
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Salaire: ${jobOffer['salary']} € par mois",
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Durée: ${jobOffer['duration']}",
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Publié le: ${jobOffer['publish_date']}",
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            ),
+            SizedBox(height: 20),
+            Text(
+              jobOffer['description'],
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Profil recherché:",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            for (var profil in jobOffer['profil'])
               Text(
-                jobOffer['title'],
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "Lieu: ${jobOffer['place']}",
+                "- $profil",
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 10),
-              Text(
-                "Type de contrat: ${jobOffer['contract']}",
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "Salaire: ${jobOffer['salary']} € par mois",
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "Durée: ${jobOffer['duration']}",
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "Publié le: ${jobOffer['publish_date']}",
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-              ),
-              SizedBox(height: 20),
-              Text(
-                jobOffer['description'],
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 20),
-              Text(
-                "Profil recherché:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              for (var profil in jobOffer['profil'])
-                Text(
-                  "- $profil",
-                  style: TextStyle(fontSize: 16),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );

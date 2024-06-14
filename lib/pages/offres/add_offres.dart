@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ohana_admin/pages/composants/section_title.dart';
 import 'package:ohana_admin/pages/composants/text_field.dart';
+import 'package:ohana_admin/pages/composants/upload_image.dart';
 
 class AddOffrePage extends StatefulWidget {
   const AddOffrePage({super.key});
@@ -24,6 +25,7 @@ class _AddOffreState extends State<AddOffrePage> {
   final List<TextEditingController> _profileControllers = [
     TextEditingController()
   ];
+  String? _imageUrl;
 
   @override
   void dispose() {
@@ -48,6 +50,7 @@ class _AddOffreState extends State<AddOffrePage> {
 
         Map<String, dynamic> jobOfferData = {
           'title': _titleController.text,
+          'url_image': _imageUrl ?? '',
           'place': _placeController.text,
           'contract': _contractController.text,
           'salary': double.tryParse(_salaryController.text) ?? 0.0,
@@ -86,6 +89,12 @@ class _AddOffreState extends State<AddOffrePage> {
       if (_profileControllers.length > 1) {
         _profileControllers.removeAt(index);
       }
+    });
+  }
+
+  void _onImageUploaded(String imageUrl) {
+    setState(() {
+      _imageUrl = imageUrl;
     });
   }
 
@@ -128,6 +137,9 @@ class _AddOffreState extends State<AddOffrePage> {
                   labelText: 'Durée',
                   validatorMessage: 'Veuillez entrer une durée',
                 ),
+                UploadImage(onImageUploaded: _onImageUploaded),
+                if (_imageUrl != null)
+                  SizedBox(width: 100, child: Image.network(_imageUrl!)),
                 BuildSectionTitle(title: 'Description'),
                 BuildTextField(
                   controller: _descriptionController,

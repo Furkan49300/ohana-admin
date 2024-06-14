@@ -36,7 +36,9 @@ class MessagerieDetailPage extends StatelessWidget {
             children: [
               Text(
                 "Nom: ${message['lastname']}",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                ),
               ),
               SizedBox(height: 10),
               Text(
@@ -50,12 +52,12 @@ class MessagerieDetailPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                "Offre: ${message['offer']}",
+                "Sujet: ${message['subject']}",
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 10),
               Text(
-                "Contenu:",
+                "Contenu du message:",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),

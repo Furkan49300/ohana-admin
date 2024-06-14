@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MessageriePage extends StatelessWidget {
   final Function(Map<String, dynamic>, String) onMessageDetailPressed;
@@ -29,77 +28,91 @@ class MessageriePage extends StatelessWidget {
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return Center(child: Text("Aucun message trouvé"));
                 }
-                return Wrap(
-                  alignment: WrapAlignment.start,
-                  spacing: 8.0,
-                  runSpacing: 10.0,
-                  children: snapshot.data!.docs.map((doc) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    var doc = snapshot.data!.docs[index];
                     var message = doc.data() as Map<String, dynamic>;
                     var messageId = doc.id;
-                    return MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () {
-                          onMessageDetailPressed(message, messageId);
-                        },
-                        child: Container(
-                          width: 250,
-                          height: 150,
-                          margin:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+
+                    // Convert timestamp to DateTime
+                    var timestamp = message['date_sent'] as Timestamp;
+                    var dateTime = timestamp.toDate();
+                    var formattedDate =
+                        DateFormat('yyyy-MM-dd – kk:mm').format(dateTime);
+
+                    return GestureDetector(
+                      onTap: () {
+                        onMessageDetailPressed(message, messageId);
+                      },
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.blue,
+                              child: Text(
+                                message['lastname'][0],
+                                style: TextStyle(color: Colors.white),
                               ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${message['lastname']} ${message['firstname']}",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "Sujet: ${message['subject']}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[700],
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  "Nom: ${message['lastname']}",
+                                  "Date: $formattedDate",
                                   style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.grey[500],
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Prénom: ${message['firstname']}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[700],
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Offre: ${message['offer']}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[700],
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                                SizedBox(height: 5),
                               ],
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     );
-                  }).toList(),
+                  },
                 );
               },
             ),

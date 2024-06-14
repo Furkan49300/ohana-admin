@@ -6,7 +6,11 @@ class ApercuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("Page principale"),
+      body: Column(
+        children: [
+          Text("Page principale"),
+        ],
+      ),
     );
   }
 }

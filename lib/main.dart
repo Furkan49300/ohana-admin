@@ -4,9 +4,10 @@ import 'package:ohana_admin/pages/article/add_articles.dart';
 import 'package:ohana_admin/pages/before_home.dart';
 import 'package:ohana_admin/pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ohana_admin/pages/widget_tree.dart';
 import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -22,13 +23,13 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'OHana Admin',
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: HomePage()),
+      home: WidgetTree(),
       theme: ThemeData(
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero, // Pas de border radius
+              borderRadius: BorderRadius.zero,
             ),
           ),
         ),

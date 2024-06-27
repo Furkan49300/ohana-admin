@@ -26,6 +26,10 @@ class MessagerieDetailPage extends StatelessWidget {
             icon: Icon(Icons.delete),
             onPressed: () => _deleteMessage(context),
           ),
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () => _markAsReplied(context),
+          ),
         ],
       ),
       body: Padding(
@@ -115,5 +119,21 @@ class MessagerieDetailPage extends StatelessWidget {
           },
         )) ??
         false;
+  }
+
+  void _markAsReplied(BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('messagerie')
+          .doc(messageId)
+          .update({'repondu': true});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Message marqué comme répondu')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur lors de la mise à jour du message')),
+      );
+    }
   }
 }

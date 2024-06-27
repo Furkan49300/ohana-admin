@@ -1,18 +1,22 @@
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:ohana_admin/pages/article/edit_article_page.dart';
 
 class ArticleDetailPage extends StatelessWidget {
   final Map<String, dynamic> article;
   final String articleId;
   final VoidCallback onBackPressed;
+  final void Function(Map<String, dynamic>, String) onEditPressed;
 
   const ArticleDetailPage({
     Key? key,
     required this.article,
     required this.articleId,
     required this.onBackPressed,
+    required this.onEditPressed,
   }) : super(key: key);
 
   @override
@@ -24,6 +28,10 @@ class ArticleDetailPage extends StatelessWidget {
           onPressed: onBackPressed,
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () => onEditPressed(article, articleId),
+          ),
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () => _deleteArticle(context),
@@ -97,6 +105,18 @@ class ArticleDetailPage extends StatelessWidget {
         ),
       );
     }).toList();
+  }
+
+  void _editArticle(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EditArticlePage(
+          article: article,
+          articleId: articleId,
+          onSave: () {},
+        ),
+      ),
+    );
   }
 
   void _deleteArticle(BuildContext context) async {

@@ -3,6 +3,7 @@ import 'package:ohana_admin/appbar.dart';
 import 'package:ohana_admin/pages/article/add_articles.dart';
 import 'package:ohana_admin/pages/article/article_detail_page.dart';
 import 'package:ohana_admin/pages/article/articles_page.dart';
+import 'package:ohana_admin/pages/article/edit_article_page.dart';
 import 'package:ohana_admin/pages/candidatures_page.dart';
 import 'package:ohana_admin/pages/devis/devis_details_page.dart';
 import 'package:ohana_admin/pages/devis/devis_page.dart';
@@ -107,11 +108,32 @@ class _HomePageState extends State<HomePage> {
   void _showArticleDetailPage(Map<String, dynamic> article, String articleId) {
     setState(() {
       _selectedPage = ArticleDetailPage(
+          article: article,
+          articleId: articleId,
+          onBackPressed: _showArticlesPage,
+          onEditPressed: _showEditArticlePage);
+      currentPage = "article_detail";
+    });
+  }
+
+  void _showEditArticlePage(Map<String, dynamic> article, String articleId) {
+    setState(() {
+      _selectedPage = EditArticlePage(
         article: article,
         articleId: articleId,
-        onBackPressed: _showArticlesPage,
+        onSave: _navigateToArticlesPage,
       );
-      currentPage = "article_detail";
+      currentPage = "article_edit";
+    });
+  }
+
+  void _navigateToArticlesPage() {
+    setState(() {
+      _selectedPage = ArticlesPage(
+        onAddArticlePressed: _showAddArticlesPage,
+        onArticleDetailPressed: _showArticleDetailPage,
+      );
+      currentPage = "articles";
     });
   }
 

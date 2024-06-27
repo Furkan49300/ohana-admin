@@ -26,6 +26,10 @@ class DevisDetailPage extends StatelessWidget {
             icon: Icon(Icons.delete),
             onPressed: () => _deleteDevis(context),
           ),
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () => _markAsReplied(context),
+          ),
         ],
       ),
       body: Padding(
@@ -113,5 +117,21 @@ class DevisDetailPage extends StatelessWidget {
           },
         )) ??
         false;
+  }
+
+  void _markAsReplied(BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('devis')
+          .doc(devisId)
+          .update({'repondu': true});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Devis marqué comme répondu')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur lors de la mise à jour du devis')),
+      );
+    }
   }
 }

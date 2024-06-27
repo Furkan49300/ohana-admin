@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 class OffresPage extends StatelessWidget {
   final VoidCallback onAddOffrePressed;
-  final Function(Map<String, dynamic>, String)
-      onOffreDetailPressed; // Ajoutez cette ligne
+  final Function(Map<String, dynamic>, String) onOffreDetailPressed;
 
   const OffresPage(
       {super.key,
@@ -42,8 +41,7 @@ class OffresPage extends StatelessWidget {
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
-                          onOffreDetailPressed(
-                              offre, offreId); // Utilisez la fonction ici
+                          onOffreDetailPressed(offre, offreId);
                         },
                         child: Container(
                           width: 250,

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:ohana_admin/auth.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onMenuPressed;
 
   const MyAppBar({super.key, required this.onMenuPressed});
+  Future<void> signOut() async {
+    await Auth().signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.purple,
       centerTitle: true,
-      title: const Text("OHana Admin"),
+      title: const Text("OHana Admin", style: TextStyle(fontSize: 18)),
       leading: Builder(
         builder: (BuildContext context) {
           return IconButton(
@@ -19,7 +23,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           );
         },
       ),
-      actions: [IconButton(onPressed: () {}, icon: Icon(Icons.login))],
+      actions: [
+        IconButton(
+            onPressed: () {
+              signOut();
+            },
+            icon: Icon(Icons.login))
+      ],
     );
   }
 

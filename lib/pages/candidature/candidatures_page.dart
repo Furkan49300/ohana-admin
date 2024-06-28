@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class DevisPage extends StatelessWidget {
-  final Function(Map<String, dynamic>, String) onDevisDetailPressed;
+class CandidaturePage extends StatelessWidget {
+  final Function(Map<String, dynamic>, String) onCandidatureDetailPressed;
 
-  const DevisPage({super.key, required this.onDevisDetailPressed});
+  const CandidaturePage({super.key, required this.onCandidatureDetailPressed});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Devis'),
+        title: const Text('Candidatures'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,54 +20,23 @@ class DevisPage extends StatelessWidget {
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('devis')
-                  .orderBy('repondu')
+                  .collection('candidature')
+                  .orderBy('date', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text("Aucun devis trouvé"));
+                  return Center(child: Text("Aucune candidature trouvée"));
                 }
 
                 var docs = snapshot.data!.docs;
-                var nonReponduDocs =
-                    docs.where((doc) => !(doc['repondu'] ?? false)).toList();
-                var reponduDocs =
-                    docs.where((doc) => doc['repondu'] ?? false).toList();
 
                 return ListView(
-                  children: [
-                    if (nonReponduDocs.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Devis non répondus",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ...nonReponduDocs
-                        .map((doc) => buildDevisTile(context, doc))
-                        .toList(),
-                    if (reponduDocs.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Devis répondus",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ...reponduDocs
-                        .map((doc) => buildDevisTile(context, doc))
-                        .toList(),
-                  ],
+                  children: docs
+                      .map((doc) => buildCandidatureTile(context, doc))
+                      .toList(),
                 );
               },
             ),
@@ -76,17 +46,16 @@ class DevisPage extends StatelessWidget {
     );
   }
 
-  Widget buildDevisTile(BuildContext context, QueryDocumentSnapshot doc) {
-    var devis = doc.data() as Map<String, dynamic>;
-    var devisId = doc.id;
+  Widget buildCandidatureTile(BuildContext context, QueryDocumentSnapshot doc) {
+    var candidature = doc.data() as Map<String, dynamic>;
+    var candidatureId = doc.id;
 
-    var timestamp = devis['date_sent'] as Timestamp;
-    var dateTime = timestamp.toDate();
-    var formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(dateTime);
+    var timestamp = (candidature['date'] as Timestamp).toDate();
+    var formattedDate = DateFormat('yyyy-MM-dd').format(timestamp);
 
     return GestureDetector(
       onTap: () {
-        onDevisDetailPressed(devis, devisId);
+        onCandidatureDetailPressed(candidature, candidatureId);
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -108,7 +77,7 @@ class DevisPage extends StatelessWidget {
             CircleAvatar(
               backgroundColor: Colors.blue,
               child: Text(
-                devis['lastname'][0],
+                candidature['lastName'][0],
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -118,7 +87,7 @@ class DevisPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${devis['lastname']} ${devis['firstname']}",
+                    "${candidature['lastName']} ${candidature['firstName']}",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -126,7 +95,7 @@ class DevisPage extends StatelessWidget {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "Offre: ${devis['offer']}",
+                    "Offre postulée: ${candidature['joboffers']}",
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[700],
@@ -134,6 +103,32 @@ class DevisPage extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  Text(
+                    "Email: ${candidature['email']}",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  GestureDetector(
+                    onTap: () => _launchURL(candidature['cv']),
+                    child: Text(
+                      "Lien vers cv",
+                      style: TextStyle(fontSize: 16, color: Colors.blue),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (candidature['cover_letter'].isNotEmpty)
+                    Text(
+                      "Lettre de motivation: ${candidature['cover_letter']}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[700],
+                      ),
+                    )
                 ],
               ),
             ),
@@ -147,11 +142,29 @@ class DevisPage extends StatelessWidget {
                     color: Colors.grey[500],
                   ),
                 ),
+                SizedBox(height: 5),
+                if (candidature['cv'].isNotEmpty)
+                  Text(
+                    "CV Disponible",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.green,
+                    ),
+                  ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Impossible de charger le fichier $url';
+    }
   }
 }

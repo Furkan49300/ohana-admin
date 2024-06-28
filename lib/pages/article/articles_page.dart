@@ -5,8 +5,7 @@ import 'article_detail_page.dart';
 
 class ArticlesPage extends StatelessWidget {
   final VoidCallback onAddArticlePressed;
-  final Function(Map<String, dynamic>, String)
-      onArticleDetailPressed; // Changez le type pour accepter les arguments
+  final Function(Map<String, dynamic>, String) onArticleDetailPressed;
 
   const ArticlesPage(
       {super.key,
@@ -44,8 +43,7 @@ class ArticlesPage extends StatelessWidget {
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
-                          onArticleDetailPressed(
-                              article, articleId); // Utilisez la fonction ici
+                          onArticleDetailPressed(article, articleId);
                         },
                         child: Container(
                           width: 250,

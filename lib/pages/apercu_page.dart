@@ -37,6 +37,8 @@ class ApercuPage extends StatelessWidget {
                     Icons.work, Colors.purple),
                 _buildCountContainer('Messages', counts['messagerie']!,
                     Icons.message, Colors.red),
+                _buildCountContainer('Candidatures', counts['candidature']!,
+                    Icons.work_history, Colors.blue)
               ],
             );
           }
@@ -51,6 +53,7 @@ class ApercuPage extends StatelessWidget {
     final contactsCount = await _getDocumentCount('contacts');
     final emploiCount = await _getDocumentCount('emploi');
     final messagerieCount = await _getDocumentCount('messagerie');
+    final candidatureCount = await _getDocumentCount('candidature');
 
     return {
       'devis': devisCount,
@@ -58,6 +61,7 @@ class ApercuPage extends StatelessWidget {
       'contacts': contactsCount,
       'emploi': emploiCount,
       'messagerie': messagerieCount,
+      'candidature': candidatureCount
     };
   }
 
@@ -80,22 +84,18 @@ class ApercuPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 24, color: color), // Taille de l'icône réduite
+          Icon(icon, size: 24, color: color),
           SizedBox(height: 8),
           Text(
             title,
-            style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold), // Taille de texte réduite
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 4),
           Text(
             count.toString(),
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: color), // Taille de texte réduite
+                fontSize: 16, fontWeight: FontWeight.bold, color: color),
           ),
         ],
       ),

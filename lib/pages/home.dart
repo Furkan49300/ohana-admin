@@ -4,7 +4,7 @@ import 'package:ohana_admin/pages/article/add_articles.dart';
 import 'package:ohana_admin/pages/article/article_detail_page.dart';
 import 'package:ohana_admin/pages/article/articles_page.dart';
 import 'package:ohana_admin/pages/article/edit_article_page.dart';
-import 'package:ohana_admin/pages/candidatures_page.dart';
+import 'package:ohana_admin/pages/candidature/candidatures_page.dart';
 import 'package:ohana_admin/pages/devis/devis_details_page.dart';
 import 'package:ohana_admin/pages/devis/devis_page.dart';
 import 'package:ohana_admin/pages/lateral_bar.dart';
@@ -100,7 +100,8 @@ class _HomePageState extends State<HomePage> {
 
   void _showCandidaturesPage() {
     setState(() {
-      _selectedPage = CandidaturesPage();
+      _selectedPage =
+          CandidaturePage(onCandidatureDetailPressed: (p0, p1) => {});
       currentPage = "candidature";
     });
   }

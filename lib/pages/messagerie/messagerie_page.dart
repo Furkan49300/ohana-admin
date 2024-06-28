@@ -80,7 +80,6 @@ class MessageriePage extends StatelessWidget {
     var message = doc.data() as Map<String, dynamic>;
     var messageId = doc.id;
 
-    // Convert timestamp to DateTime
     var timestamp = message['date_sent'] as Timestamp;
     var dateTime = timestamp.toDate();
     var formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(dateTime);

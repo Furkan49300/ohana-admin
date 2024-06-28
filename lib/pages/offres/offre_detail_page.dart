@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 
 class OffreDetailPage extends StatelessWidget {
   final Map<String, dynamic> jobOffer;
-  final String offreId; // Ajoutez l'ID de l'offre
-  final VoidCallback
-      onBackPressed; // Ajoutez un callback pour le bouton de retour
+  final String offreId;
+  final VoidCallback onBackPressed;
 
   const OffreDetailPage(
       {super.key,
@@ -19,7 +18,7 @@ class OffreDetailPage extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: onBackPressed, // Utilisez le callback ici
+          onPressed: onBackPressed,
         ),
         actions: [
           IconButton(
@@ -29,7 +28,6 @@ class OffreDetailPage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        // Ajoutez SingleChildScrollView ici
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +98,7 @@ class OffreDetailPage extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Offre supprimée avec succès')),
         );
-        onBackPressed(); // Navigate back after deletion
+        onBackPressed();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erreur lors de la suppression de l\'offre')),

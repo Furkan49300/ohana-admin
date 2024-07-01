@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "279414273306",
-    "project_id": "ohana-admin",
-    "storage_bucket": "ohana-admin.appspot.com"
+    "project_number": "592154909664",
+    "project_id": "ohana-383fe",
+    "storage_bucket": "ohana-383fe.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:279414273306:android:037efd543532c3c9dca8a3",
+        "mobilesdk_app_id": "1:592154909664:android:3529a0c921cd4b2e83a985",
         "android_client_info": {
           "package_name": "com.example.ohana_admin"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAmoHphyHBCZbmkRwKjf-Ckrw-61qc5_FE"
+          "current_key": "AIzaSyCXIVacpB6vEWgj7zBEDYrKrHjq8ufMpKU"
         }
       ],
       "services": {

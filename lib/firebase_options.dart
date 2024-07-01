@@ -41,46 +41,47 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAIHmbx8Jt5cxtI3SOYzFSE5yYV_0TBgZM',
-    appId: '1:279414273306:web:480576713109e061dca8a3',
-    messagingSenderId: '279414273306',
-    projectId: 'ohana-admin',
-    authDomain: 'ohana-admin.firebaseapp.com',
-    storageBucket: 'ohana-admin.appspot.com',
+    apiKey: 'AIzaSyCep9UEzAI2d9hUtdtDjbjbXIC8ih2Nm6w',
+    appId: '1:592154909664:web:e57764dee245756683a985',
+    messagingSenderId: '592154909664',
+    projectId: 'ohana-383fe',
+    authDomain: 'ohana-383fe.firebaseapp.com',
+    storageBucket: 'ohana-383fe.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAmoHphyHBCZbmkRwKjf-Ckrw-61qc5_FE',
-    appId: '1:279414273306:android:037efd543532c3c9dca8a3',
-    messagingSenderId: '279414273306',
-    projectId: 'ohana-admin',
-    storageBucket: 'ohana-admin.appspot.com',
+    apiKey: 'AIzaSyCXIVacpB6vEWgj7zBEDYrKrHjq8ufMpKU',
+    appId: '1:592154909664:android:3529a0c921cd4b2e83a985',
+    messagingSenderId: '592154909664',
+    projectId: 'ohana-383fe',
+    storageBucket: 'ohana-383fe.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBGHA1SIoclVDU84absI6XdbC8oPtWAcZU',
-    appId: '1:279414273306:ios:2ca7347edbdf8b5edca8a3',
-    messagingSenderId: '279414273306',
-    projectId: 'ohana-admin',
-    storageBucket: 'ohana-admin.appspot.com',
+    apiKey: 'AIzaSyByOR1nv15GaXZACUd634BU6JvyQcY7pVE',
+    appId: '1:592154909664:ios:4ca4fa8869b048fc83a985',
+    messagingSenderId: '592154909664',
+    projectId: 'ohana-383fe',
+    storageBucket: 'ohana-383fe.appspot.com',
     iosBundleId: 'com.example.ohanaAdmin',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBGHA1SIoclVDU84absI6XdbC8oPtWAcZU',
-    appId: '1:279414273306:ios:2ca7347edbdf8b5edca8a3',
-    messagingSenderId: '279414273306',
-    projectId: 'ohana-admin',
-    storageBucket: 'ohana-admin.appspot.com',
+    apiKey: 'AIzaSyByOR1nv15GaXZACUd634BU6JvyQcY7pVE',
+    appId: '1:592154909664:ios:4ca4fa8869b048fc83a985',
+    messagingSenderId: '592154909664',
+    projectId: 'ohana-383fe',
+    storageBucket: 'ohana-383fe.appspot.com',
     iosBundleId: 'com.example.ohanaAdmin',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAIHmbx8Jt5cxtI3SOYzFSE5yYV_0TBgZM',
-    appId: '1:279414273306:web:b6d578e4e493e47fdca8a3',
-    messagingSenderId: '279414273306',
-    projectId: 'ohana-admin',
-    authDomain: 'ohana-admin.firebaseapp.com',
-    storageBucket: 'ohana-admin.appspot.com',
+    apiKey: 'AIzaSyCep9UEzAI2d9hUtdtDjbjbXIC8ih2Nm6w',
+    appId: '1:592154909664:web:d7d2bc4d44ca706083a985',
+    messagingSenderId: '592154909664',
+    projectId: 'ohana-383fe',
+    authDomain: 'ohana-383fe.firebaseapp.com',
+    storageBucket: 'ohana-383fe.appspot.com',
   );
+
 }

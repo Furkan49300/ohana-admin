@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:intl/intl.dart';
 import 'package:ohana_admin/pages/article/edit_article_page.dart';
 
 class ArticleDetailPage extends StatelessWidget {
@@ -21,6 +21,9 @@ class ArticleDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime publishDate = (article['publish_date'] as Timestamp).toDate();
+    String formattedPublishDate = DateFormat('dd/MM/yyyy').format(publishDate);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -50,7 +53,7 @@ class ArticleDetailPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                "Publié le: ${article['publish_date']}",
+                "Publié le: $formattedPublishDate",
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
               SizedBox(height: 20),

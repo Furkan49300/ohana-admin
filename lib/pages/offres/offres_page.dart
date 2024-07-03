@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class OffresPage extends StatelessWidget {
   final VoidCallback onAddOffrePressed;
@@ -37,6 +38,14 @@ class OffresPage extends StatelessWidget {
                   children: snapshot.data!.docs.map((doc) {
                     var offre = doc.data() as Map<String, dynamic>;
                     var offreId = doc.id;
+
+                    // Convertir le timestamp en DateTime
+                    DateTime publishDate =
+                        (offre['publish_date'] as Timestamp).toDate();
+                    // Formater la date
+                    String formattedPublishDate =
+                        DateFormat('dd/MM/yyyy').format(publishDate);
+
                     return MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
@@ -74,7 +83,7 @@ class OffresPage extends StatelessWidget {
                                 ),
                                 SizedBox(height: 10),
                                 Text(
-                                  'Date de publication: ${offre['publish_date']}',
+                                  'Date de publication: $formattedPublishDate',
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.grey[700],

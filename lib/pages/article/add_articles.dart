@@ -21,7 +21,6 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
   final TextEditingController _publishDateController = TextEditingController();
   final TextEditingController _updateDateController = TextEditingController();
   List<Map<String, dynamic>> _paragraphControllers = [];
-  QuillController _controller = QuillController.basic();
   String? imageUrl;
 
   @override
@@ -49,13 +48,14 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
 
   void _createArticle() async {
     if (_formKey.currentState!.validate()) {
-      String currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
+      DateTime now = DateTime.now();
+      Timestamp currentTimestamp = Timestamp.fromDate(now);
 
       Map<String, dynamic> articleData = {
         'title': _titleController.text,
         'description': _descriptionController.text,
-        'publish_date': currentDate,
-        'update_date': currentDate,
+        'publish_date': currentTimestamp,
+        'update_date': currentTimestamp,
         'image': imageUrl ?? '',
         'paragraphs': _paragraphControllers.map((paragraph) {
           return {
@@ -177,7 +177,7 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
                 configurations: QuillSimpleToolbarConfigurations(
                   controller: controllers['text'],
                   sharedConfigurations: const QuillSharedConfigurations(
-                    locale: Locale('de'),
+                    locale: Locale('fr'),
                   ),
                 ),
               ),
@@ -191,7 +191,7 @@ class _AddArticlesPageState extends State<AddArticlesPage> {
                     padding: EdgeInsets.all(20),
                     controller: controllers['text'],
                     sharedConfigurations: const QuillSharedConfigurations(
-                      locale: Locale('de'),
+                      locale: Locale('fr'),
                     ),
                   ),
                 ),

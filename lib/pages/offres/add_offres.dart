@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:ohana_admin/pages/composants/section_title.dart';
 import 'package:ohana_admin/pages/composants/text_field.dart';
 import 'package:ohana_admin/pages/composants/upload_image.dart';
+import 'package:diacritic/diacritic.dart';
 
 class AddOffrePage extends StatefulWidget {
   const AddOffrePage({super.key});
@@ -48,6 +49,15 @@ class _AddOffreState extends State<AddOffrePage> {
         String offerContent =
             jsonEncode(_quillController.document.toDelta().toJson());
 
+        // Function to remove accents and convert to lowercase
+        String normalizeString(String input) {
+          return removeDiacritics(input).toLowerCase();
+        }
+
+        // Generate keywords from the title
+        List<String> keywords =
+            normalizeString(_titleController.text).split(' ');
+
         Map<String, dynamic> jobOfferData = {
           'title': _titleController.text,
           'url_image': _imageUrl ?? '',
@@ -57,9 +67,8 @@ class _AddOffreState extends State<AddOffrePage> {
           'publish_date': currentTimestamp,
           'duration': _durationController.text,
           'alert': _alertController.text,
-          'offer_content': offerContent, // Updated field for Quill content
-          'profil':
-              _profileControllers.map((controller) => controller.text).toList(),
+          'offer_content': offerContent,
+          'keywords': keywords,
         };
 
         CollectionReference jobOffersRef =

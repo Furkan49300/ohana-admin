@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:intl/intl.dart';
-import 'package:ohana_admin/pages/composants/section_title.dart';
-import 'package:ohana_admin/pages/composants/text_field.dart';
-import 'package:ohana_admin/pages/composants/upload_image.dart';
+import 'package:ohana_admin/components/section_title.dart';
+import 'package:ohana_admin/components/text_field.dart';
+import 'package:ohana_admin/components/upload_image.dart';
 
 class AddArticlesPage extends StatefulWidget {
   const AddArticlesPage({super.key});

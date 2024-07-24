@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ohana_admin/auth.dart';
 
+import '../components/error_message.dart';
+
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({super.key});
 
@@ -42,15 +44,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     );
   }
 
-  Widget _errorMessage() {
-    return errorMessage == ''
-        ? SizedBox.shrink()
-        : Text(
-            errorMessage!,
-            style: TextStyle(color: Colors.red),
-          );
-  }
-
   Widget _submitButton() {
     return ElevatedButton(
       onPressed: signInWithEmailAndPassword,
@@ -88,7 +81,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
               _entryField('Mot de passe', _controllerPassword,
                   isPassword: true),
               SizedBox(height: 20),
-              _errorMessage(),
+              ErrorMessage(errorMessage: errorMessage),
               SizedBox(height: 20),
               _submitButton(),
               SizedBox(height: 50),
